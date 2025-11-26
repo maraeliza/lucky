@@ -6,23 +6,26 @@ export const schemaLogin = z.object({
   email: z
     .string()
     .email({ message: "E-mail inválido" })
-    .min(1, { message: "O e-mail é obrigatório" }),
+    .min(1, { message: "O e-mail é obrigatório" })
+    .max(50, { message: "O e-mail não pode ter mais de 50 caracteres" }),
   password: z
     .string()
-    .min(8, { message: "A senha é obrigatória e deve ser válida" }),
+    .min(8, { message: "A senha é obrigatória e deve ser válida" })
+    .max(50, { message: "A senha não pode ter mais de 50 caracteres" }),
   rememberMe: z.boolean().optional(),
 });
 
 export const schemaRecoverPassword = z.object({
-  email: z.string().email({
-    message: "Informe um email válido",
-  }),
+  email: z
+    .string()
+    .email({ message: "Informe um email válido" })
+    .max(50, { message: "O e-mail não pode ter mais de 50 caracteres" }),
 });
 export const schemaCategory = z.object({
   description: z
     .string()
     .min(3, { message: "O nome da categoria é obrigatório" }),
-  color: z.string().optional(),
+  color: z.string().max(7, { message: "Cor inválida" }).optional(),
 });
 export const schemaAddress = z.object({
   id: z.number().int().positive().optional(),

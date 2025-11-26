@@ -48,7 +48,7 @@ const addressSchema = z.object({
   state: z
     .string()
     .min(1, "Estado é obrigatório")
-    .max(15, "Estado deve ter no máximo 15 caracteres"),
+    .max(20, "Estado deve ter no máximo 20 caracteres"),
   zipCode: z
     .string()
     .min(1, "CEP é obrigatório")
