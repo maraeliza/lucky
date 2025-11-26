@@ -29,19 +29,36 @@ import { MaskedInput } from "@/components/my-ui/MaskedInput";
 import { useViaCep } from "@/hooks/utils/getAddressByCEP";
 
 const addressSchema = z.object({
-  street: z.string().min(1, "Rua é obrigatória"),
-  number: z.string().min(1, "Número é obrigatório"),
-  district: z.string().min(1, "Bairro é obrigatório"),
-  city: z.string().min(1, "Cidade é obrigatória"),
-  state: z.string().min(1, "Estado é obrigatório"),
-  zipCode: z.string().min(1, "CEP é obrigatório"),
+  street: z
+    .string()
+    .min(1, "Rua é obrigatória")
+    .max(100, "Rua não pode ter mais de 100 caracteres"),
+  number: z
+    .string()
+    .min(1, "Número é obrigatório")
+    .max(10, "Número não pode ter mais de 10 caracteres"),
+  district: z
+    .string()
+    .min(1, "Bairro é obrigatório")
+    .max(50, "Bairro não pode ter mais de 50 caracteres"),
+  city: z
+    .string()
+    .min(1, "Cidade é obrigatória")
+    .max(50, "Cidade não pode ter mais de 50 caracteres"),
+  state: z
+    .string()
+    .min(1, "Estado é obrigatório")
+    .max(15, "Estado deve ter no máximo 15 caracteres"),
+  zipCode: z
+    .string()
+    .min(1, "CEP é obrigatório")
+    .max(9, "CEP inválido"),
 });
-
 const userSchema = z.object({
   id: z.number(),
-  name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(1, "Telefone é obrigatório"),
+  name: z.string().min(1, "Nome é obrigatório").max(100, "Nome não pode ter mais de 100 caracteres"),
+  email: z.string().email("Email inválido").max(50, "Email não pode ter mais de 50 caracteres"),
+  phone: z.string().min(1, "Telefone é obrigatório").max(15, "Telefone inválido"),
   address: addressSchema,
 });
 
