@@ -20,6 +20,7 @@ import { Path, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateModalProps } from "@/interfaces/common";
 import { ColorInput } from "../ColorInput";
+import { Controller } from "react-hook-form";
 
 export function CreateModal<T extends Record<string, any>>({
   isOpen,
@@ -77,10 +78,18 @@ export function CreateModal<T extends Record<string, any>>({
                     ))}
                   </Select>
                 ) : field.type === "color" ? (
-                  <ColorInput
-                    value={""}
-                    onChange={() => {}}
-                    placeholder={field.placeholder || "Digite #RRGGBB ou cor"}
+                  <Controller
+                    name={field.key as Path<T>}
+                    control={control}
+                    render={({ field: { value, onChange } }) => (
+                      <ColorInput
+                        value={value}
+                        placeholder={
+                          field.placeholder || "Digite #RRGGBB ou cor"
+                        }
+                        onChange={onChange}
+                      />
+                    )}
                   />
                 ) : (
                   <Input

@@ -83,21 +83,19 @@ export default function Page() {
   const categoryOptions: Option[] =
     categories?.map((c: Category) => ({
       name: c.description,
-      id: c.id.toString(),
+      id: c.id,
     })) || [];
 
   const itemFields = fields.map((field) =>
     field.key === "categoryId" ? { ...field, options: categoryOptions } : field
   );
-  console.log(itemFields);
-  console.log(categoryOptions);
 
   return (
     <ProtectedRoute roles={["ADMIN"]}>
       <Center py={10} px={10}>
         <VStack spacing={6} align="stretch" w="full" maxW="1200px">
           <HStack justify="space-between">
-            <Heading size="lg">Itens</Heading>
+            <Heading size="lg">Produtos</Heading>
             <Button colorScheme="teal" onClick={() => setIsCreateOpen(true)}>
               Novo Item
             </Button>
