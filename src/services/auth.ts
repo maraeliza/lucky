@@ -16,3 +16,10 @@ export async function getUserFromSession(req: any) {
     return null;
   }
 }
+export function clearUserCookie(res: any) {
+  res.cookies.set("uaifoodtoken", "", {
+    httpOnly: true,
+    path: "/",
+    maxAge: 0,
+  });
+}

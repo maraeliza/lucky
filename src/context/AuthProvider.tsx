@@ -24,9 +24,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const router = useRouter();
 
-  const logout = useCallback(() => {
-    setUser(null);
-    router.push("/auth");
+  const logout = useCallback(async () => {
+    try {
+      const res = await fetch("/api/me", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        setUser(null);
+        router.push("/auth");
+        console.warn("Falha ao deslogar:", res.status, res.statusText);
+      }
+    } catch (err) {
+      console.error("Erro ao deslogar:", err);
+    }
   }, [router]);
 
   const loadUser = useCallback(async () => {
@@ -75,15 +87,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push("/home-client");
       return;
     }
-
   }, [user, loading, router]);
 
   useEffect(() => {
     redirectToInitialPage();
   }, [redirectToInitialPage]);
 
-  useEffect(() => {
-  }, [user, loading]);
+  useEffect(() => {}, [user, loading]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, logout, loading }}>
