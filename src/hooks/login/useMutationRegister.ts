@@ -25,7 +25,7 @@ export function useMutationRegister() {
         "Ocorreu um erro inesperado ao autenticar.";
 
       toast({
-        title: "Falha na Autenticação",
+        title: "Falha ao criar conta",
         description: message,
         status: "error",
         duration: 5000,

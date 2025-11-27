@@ -17,10 +17,11 @@ import {
 import { LockIcon } from "@chakra-ui/icons";
 import { FaUser, FaEnvelope, FaPhone, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutationRegister } from "@/hooks/login/useMutationRegister";
 import { FormRegister, schemaRegister } from "@/utils/schema";
+import { normalizePhoneNumber } from "@/utils/formats";
 
 export default function RegisterComponent({
   setIsLogin,
@@ -40,6 +41,9 @@ export default function RegisterComponent({
   const {
     handleSubmit,
     register,
+    setValue,
+    getValues,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormRegister>({
     resolver: zodResolver(schemaRegister),
@@ -142,19 +146,32 @@ export default function RegisterComponent({
               <InputLeftElement pointerEvents="none" h="100%">
                 <Icon as={FaPhone} color="gray.600" />
               </InputLeftElement>
-              <Input
-                placeholder="Telefone"
-                _placeholder={{ color: "gray.500" }}
-                bg="rgba(255, 255, 255, 0.7)"
-                border="1px solid"
-                borderColor="rgba(255, 255, 255, 0.5)"
-                borderRadius="full"
-                h="45px"
-                fontSize="sm"
-                boxShadow="sm"
-                {...register("phone")}
+
+              <Controller
+                name="phone"
+                control={control} 
+                defaultValue=""
+                render={({ field }) => (
+                  <Input
+                    placeholder="Telefone"
+                    _placeholder={{ color: "gray.500" }}
+                    bg="rgba(255, 255, 255, 0.7)"
+                    border="1px solid"
+                    borderColor="rgba(255, 255, 255, 0.5)"
+                    borderRadius="full"
+                    h="45px"
+                    fontSize="sm"
+                    boxShadow="sm"
+                    pl={35}
+                    value={field.value}
+                    onChange={(e) =>
+                      field.onChange(normalizePhoneNumber(e.target.value))
+                    }
+                  />
+                )}
               />
             </InputGroup>
+
             <FormErrorMessage fontSize="xs" ml={4} color="red.500">
               {errors.phone?.message}
             </FormErrorMessage>

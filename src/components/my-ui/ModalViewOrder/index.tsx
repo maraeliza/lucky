@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/context/AuthProvider";
 import { OrderResponse } from "@/interfaces/order";
 import { statusLabels } from "@/utils/data";
 import { normalizeCepNumber, normalizePhoneNumber } from "@/utils/formats";
@@ -52,11 +53,14 @@ export function ViewOrderModal({
     null
   );
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const { user } = useAuth();
+  const isClient = user?.role === "CLIENT";
   const cancelRef = useRef<HTMLButtonElement>(null);
   const total =
     selectedOrder.OrderItem?.length > 0
       ? selectedOrder.OrderItem?.reduce(
-          (acc, orderItem) => acc + orderItem.item.unitPrice * orderItem.quantity,
+          (acc, orderItem) =>
+            acc + orderItem.item.unitPrice * orderItem.quantity,
           0
         )
       : 0;
@@ -131,6 +135,7 @@ export function ViewOrderModal({
               <Text fontWeight="bold" mb={2}>
                 Itens do Pedido
               </Text>
+
               <VStack align="stretch" spacing={3}>
                 {selectedOrder.OrderItem?.length > 0 ? (
                   selectedOrder.OrderItem.map((orderItem, idx) => (
@@ -144,11 +149,16 @@ export function ViewOrderModal({
                       borderColor="gray.200"
                     >
                       <VStack align="start" spacing={0}>
-                        <Text fontWeight="medium">{orderItem.item.description}</Text>
+                        <Text fontWeight="medium">
+                          {orderItem.item.description}
+                        </Text>
                         <Badge colorScheme="green">{orderItem.quantity}x</Badge>
                       </VStack>
                       <Text fontWeight="bold">
-                        R$ {(orderItem.item.unitPrice * orderItem.quantity).toFixed(2)}
+                        R${" "}
+                        {(
+                          orderItem.item.unitPrice * orderItem.quantity
+                        ).toFixed(2)}
                       </Text>
                     </HStack>
                   ))
@@ -156,6 +166,7 @@ export function ViewOrderModal({
                   <Text color="gray.500">Nenhum item pedido</Text>
                 )}
               </VStack>
+
               <Divider my={4} />
               <HStack justify="space-between">
                 <Text fontWeight="bold">Total:</Text>
@@ -164,25 +175,26 @@ export function ViewOrderModal({
                 </Text>
               </HStack>
             </Box>
-            <Select
-              mt={2}
-              size="md"
-              value={selectedOrder.status}
-              onChange={(e) => {
-                setStatusToChange(e.target.value as OrderStatus);
-                setIsAlertOpen(true);
-              }}
-              borderColor="blue.400"
-              focusBorderColor="blue.600"
-              fontWeight="medium"
-            >
-              {Object.values(OrderStatus).map((status) => (
-                <option key={status} value={status}>
-                  {statusLabels[status] || status}
-                </option>
-              ))}
-            </Select>
-
+            {!isClient && (
+              <Select
+                mt={2}
+                size="md"
+                value={selectedOrder.status}
+                onChange={(e) => {
+                  setStatusToChange(e.target.value as OrderStatus);
+                  setIsAlertOpen(true);
+                }}
+                borderColor="blue.400"
+                focusBorderColor="blue.600"
+                fontWeight="medium"
+              >
+                {Object.values(OrderStatus).map((status) => (
+                  <option key={status} value={status}>
+                    {statusLabels[status] || status}
+                  </option>
+                ))}
+              </Select>
+            )}
             {/* Botão de download */}
             <Stack direction="row" mt={6}>
               <Button
