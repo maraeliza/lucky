@@ -109,6 +109,7 @@ export function EditModal<T extends Record<string, any>>({
                     placeholder={field.placeholder ?? ""}
                     value={value}
                     onChange={(e) => handleChange(field.key, e.target.value)}
+                    maxLength={20}
                   />
                 </FormControl>
               );

@@ -145,12 +145,12 @@ export default function UserCreateModal({ isOpen, onClose }: Props) {
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                   <FormControl isInvalid={!!errors.name}>
                     <FormLabel>Nome</FormLabel>
-                    <Input {...register("name")} />
+                    <Input {...register("name")} maxLength={20} />
                     <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                   </FormControl>
                   <FormControl isInvalid={!!errors.email}>
                     <FormLabel>Email</FormLabel>
-                    <Input type="email" {...register("email")} />
+                    <Input type="email" {...register("email")} maxLength={20} />
                     <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
                   </FormControl>
                   <FormControl isInvalid={!!errors.phone}>
@@ -177,6 +177,7 @@ export default function UserCreateModal({ isOpen, onClose }: Props) {
                         type={showPassword ? "text" : "password"}
                         {...register("password")}
                         placeholder="Senha"
+                        maxLength={20}
                       />
                       <InputRightElement width="4.5rem" h="100%">
                         <Button
@@ -211,6 +212,7 @@ export default function UserCreateModal({ isOpen, onClose }: Props) {
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirmar Senha"
                         {...register("confirmPassword")}
+                        maxLength={20}
                       />
                       <InputRightElement width="4.5rem" h="100%">
                         <Button
@@ -268,7 +270,10 @@ export default function UserCreateModal({ isOpen, onClose }: Props) {
                     >
                       <FormLabel>{label}</FormLabel>
                       <InputGroup>
-                        <Input {...register(`address.${field}` as const)} />
+                        <Input
+                          {...register(`address.${field}` as const)}
+                          maxLength={20}
+                        />
                         {["street", "district", "city", "state"].includes(
                           field
                         ) &&

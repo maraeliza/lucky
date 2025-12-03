@@ -102,7 +102,6 @@ export const schemaRegister = z.object({
 });
 
 export type FormItem = z.infer<typeof schemaItem>;
-
 export type FormCategory = z.infer<typeof schemaCategory>;
 export type FormUserEdit = z.infer<typeof schemaUserEdit>;
 export type FormUser = z.infer<typeof schemaUserCadastro>;

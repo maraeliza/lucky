@@ -11,6 +11,7 @@ import {
   VStack,
   Heading,
   Box,
+  Select,
 } from "@chakra-ui/react";
 import { useDebounce } from "use-debounce";
 import { useItems } from "@/hooks/item/usePagered";
@@ -46,8 +47,10 @@ export default function Page() {
   const { data, isLoading, isError } = useItems({
     page,
     limit: pageSize,
-    description: debouncedFilter,
-    categoryId: selectedCategoryId,
+    filters: {
+      description: debouncedFilter,
+      categoryId: selectedCategoryId,
+    }
   });
 
   const { data: categories } = useAllCategories();
@@ -110,8 +113,18 @@ export default function Page() {
               bg="white"
               _dark={{ bg: "gray.700" }}
               focusBorderColor="teal.400"
-              maxW="400px"
             />
+            <Select
+              placeholder={"Selecione a categoria"}
+              value={selectedCategoryId}
+              onChange={(e) => setSelectedCategoryId(Number(e.target.value))}
+            >
+              {categoryOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.name}
+                </option>
+              ))}
+            </Select>
           </HStack>
 
           <TableWithPagination

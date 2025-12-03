@@ -8,19 +8,20 @@ import { useQuery } from "@tanstack/react-query";
 interface Props {
   page: number;
   limit: number;
-  description?: string;
-  categoryId?: number;
+  filters: {
+    categoryId?: number;
+    description?: string;
+  }
 }
 
 async function getItems({
   page,
   limit,
-  description,
-  categoryId,
+  filters
 }: Props): Promise<GetItemResponse> {
   try {
     const response = await api
-      .get("/items", { params: { page, limit, description, categoryId } })
+      .get("/items", { params: { page, limit, ...filters } })
       .then((res) => res.data);
 
     const data: Item[] = response.data;
@@ -47,10 +48,10 @@ async function getItems({
   }
 }
 
-export function useItems({ page, limit, description, categoryId }: Props) {
+export function useItems({ page, limit, filters }: Props) {
   return useQuery({
-    queryKey: ["items", { page, limit, description, categoryId }],
+    queryKey: ["items", { page, limit, filters }],
     refetchOnWindowFocus: false,
-    queryFn: () => getItems({ page, limit, description, categoryId }),
+    queryFn: () => getItems({ page, limit, filters }),
   });
 }

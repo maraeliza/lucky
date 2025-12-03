@@ -58,6 +58,7 @@ export default function Page() {
   function handleSaveEdit(updated: Category) {
     useEditMutation.mutateAsync(updated);
   }
+
   if (isLoading)
     return (
       <Center mt={10}>

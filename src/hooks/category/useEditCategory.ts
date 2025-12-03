@@ -13,7 +13,11 @@ export function useEditCategory() {
   return useMutation({
     mutationFn: async (category: CategoryEdit) => {
       const url = "/categories/" + category.id;
-      return await api.put(url, category);
+      const data = {
+        description: category.description,
+        color: category.color,
+      };
+      return await api.put(url, data);
     },
     onSuccess: () => {
       toast({

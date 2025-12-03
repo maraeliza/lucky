@@ -4,11 +4,16 @@ import { Item, ItemAdd } from "@/interfaces/item";
 import { Column, Field } from "@/interfaces/common";
 import { Box, HStack, Text } from "@chakra-ui/react";
 import { format } from "date-fns";
+import { formatDecimal } from "@/utils/formatarReal";
 
 export const columns: readonly Column<Item>[] = [
   { key: "id", header: "ID" },
   { key: "description", header: "Descrição do Item" },
-  { key: "unitPrice", header: "Preço Unitário" },
+  {
+    key: "unitPrice",
+    header: "Preço Unitário",
+    render: (value: number) => formatDecimal(value),
+  },
   {
     key: "category",
     header: "Categoria",
@@ -48,5 +53,5 @@ export const fields: Field<ItemAdd>[] = [
     label: "Categoria",
     placeholder: "Selecione a categoria",
     type: "select",
-  }
+  },
 ];

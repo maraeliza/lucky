@@ -99,6 +99,7 @@ export function CreateModal<T extends Record<string, any>>({
                       field.key as Path<T>,
                       field.type === "number" ? { valueAsNumber: true } : {}
                     )}
+                    maxLength={20}
                   />
                 )}
 

@@ -47,7 +47,7 @@ async function getUsers({
 
 export function useUsers({ page, limit, filters }: Props) {
   return useQuery({
-    queryKey: ["users", { page, limit, filters }],
+    queryKey: ["users", { page, limit, filters }, "my-user"],
     refetchOnWindowFocus: false,
     queryFn: () => getUsers({ page, limit, filters }),
   });
