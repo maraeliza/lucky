@@ -179,46 +179,54 @@ export default function OrdersDashboard() {
           {/* Conteúdo principal */}
           {isLoading ? (
             <Spinner size="lg" alignSelf="center" mt={10} />
-          ) : viewTable ? (
-            <TableWithPagination<OrderResponse>
-              data={data?.data ?? []}
-              columns={columns}
-              onDelete={handleDeleteClick}
-              onView={openModal}
-              pagination={{
-                currentPage: data?.meta.currentPage ?? 1,
-                lastPage: data?.meta.lastPage ?? 1,
-                total: data?.meta.totalCountofRegisters ?? 0,
-                pageSize,
-                onPageChange: setPage,
-                onPageSizeChange: setPageSize,
-              }}
-            />
           ) : (
-            <Stack>
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-                {data?.data.map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    order={order}
-                    openModal={openModal}
-                    handleDelete={handleDeleteClick}
+            data &&
+            data.data?.length > 0 &&
+            (viewTable ? (
+              <TableWithPagination<OrderResponse>
+                data={data?.data ?? []}
+                columns={columns}
+                onDelete={handleDeleteClick}
+                onView={openModal}
+                pagination={{
+                  currentPage: data?.meta.currentPage ?? 1,
+                  lastPage: data?.meta.lastPage ?? 1,
+                  total: data?.meta.totalCountofRegisters ?? 0,
+                  pageSize,
+                  onPageChange: setPage,
+                  onPageSizeChange: setPageSize,
+                }}
+              />
+            ) : (
+              <Stack>
+                <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                  {data?.data.map((order) => (
+                    <OrderCard
+                      key={order.id}
+                      order={order}
+                      openModal={openModal}
+                      handleDelete={handleDeleteClick}
+                    />
+                  ))}
+                </SimpleGrid>
+                {!viewTable && (
+                  <Pagination
+                    currentPage={data?.meta.currentPage ?? 1}
+                    lastPage={data?.meta.lastPage ?? 1}
+                    total={data?.meta.totalCountofRegisters ?? 0}
+                    pageSize={pageSize}
+                    onPageChange={setPage}
+                    onPageSizeChange={setPageSize}
                   />
-                ))}
-              </SimpleGrid>
-              {!viewTable && (
-                <Pagination
-                  currentPage={data?.meta.currentPage ?? 1}
-                  lastPage={data?.meta.lastPage ?? 1}
-                  total={data?.meta.totalCountofRegisters ?? 0}
-                  pageSize={pageSize}
-                  onPageChange={setPage}
-                  onPageSizeChange={setPageSize}
-                />
-              )}
-            </Stack>
+                )}
+              </Stack>
+            ))
           )}
-
+          {data && data.data?.length === 0 && !isLoading && (
+            <Box textAlign="center" mt={10}>
+              Nenhum pedido encontrado.
+            </Box>
+          )}
           {selectedOrder && (
             <ViewOrderModal
               onClose={onClose}

@@ -22,7 +22,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +48,7 @@ const userSchema = z.object({
   email: z.string().email("Email inválido"),
   phone: z.string().min(1, "Telefone é obrigatório"),
   address: addressSchema,
+  role: z.string().min(1, "Tipo de usuário é obrigatório"),
 });
 
 export type UserFormData = z.infer<typeof userSchema>;
@@ -77,6 +77,7 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
       name: user?.name || "",
       email: user?.email || "",
       phone: user?.phone || "",
+      role: user?.role || "",
       address: {
         street: user?.address?.street || "",
         number: user?.address?.number || "",
@@ -159,12 +160,12 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                 <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                   <FormControl isInvalid={!!errors.name}>
                     <FormLabel>Nome</FormLabel>
-                    <Input {...register("name")} maxLength={20}/>
+                    <Input {...register("name")} maxLength={20} />
                     <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                   </FormControl>
                   <FormControl isInvalid={!!errors.email}>
                     <FormLabel>Email</FormLabel>
-                    <Input type="email" {...register("email")} maxLength={20}/>
+                    <Input type="email" {...register("email")} maxLength={20} />
                     <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
                   </FormControl>
                   <FormControl isInvalid={!!errors.phone}>
@@ -210,7 +211,10 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                     >
                       <FormLabel>{label}</FormLabel>
                       <InputGroup>
-                        <Input {...register(`address.${field}` as const)} maxLength={20}/>
+                        <Input
+                          {...register(`address.${field}` as const)}
+                          maxLength={20}
+                        />
                         {["street", "district", "city", "state"].includes(
                           field
                         ) &&
@@ -227,6 +231,23 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                   ))}
                 </SimpleGrid>
               </Box>
+              {/* <Box p={4} bg="white" shadow="md" borderRadius="md">
+                <Heading size="md" mb={4}>
+                  Tipo de Usuário
+                </Heading>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                  <FormControl isInvalid={!!errors.role}>
+                    <Select
+                      placeholder={"Selecione o tipo de usuário"}
+                      {...register("role")}
+                    >
+                      <option value={"ADMIN"}>Administrador</option>
+                      <option value={"CLIENT"}>Cliente</option>
+                    </Select>
+                    <FormErrorMessage>{errors.role?.message}</FormErrorMessage>
+                  </FormControl>
+                </SimpleGrid>
+              </Box> */}
             </VStack>
           </ModalBody>
 

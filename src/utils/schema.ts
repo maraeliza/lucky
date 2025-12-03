@@ -24,15 +24,28 @@ export const schemaRecoverPassword = z.object({
 export const schemaCategory = z.object({
   description: z
     .string()
-    .min(3, { message: "O nome da categoria é obrigatório" }),
+    .min(3, { message: "O nome da categoria é obrigatório" })
+    .max(50, { message: "A descrição não pode ter mais de 50 caracteres" }),
   color: z.string().max(7, { message: "Cor inválida" }).optional(),
 });
 export const schemaAddress = z.object({
   id: z.number().int().positive().optional(),
-  street: z.string().min(3, { message: "A rua é obrigatória" }),
-  number: z.string().min(1, { message: "O número é obrigatório" }),
-  district: z.string().min(3, { message: "O bairro é obrigatório" }),
-  city: z.string().min(3, { message: "A cidade é obrigatória" }),
+  street: z
+    .string()
+    .min(3, { message: "A rua é obrigatória" })
+    .max(50, { message: "A rua não pode ter mais de 50 caracteres" }),
+  number: z
+    .string()
+    .min(1, { message: "O número é obrigatório" })
+    .max(8, { message: "O número não pode ter mais de 8 caracteres" }),
+  district: z
+    .string()
+    .min(3, { message: "O bairro é obrigatório" })
+    .max(50, { message: "O bairro não pode ter mais de 50 caracteres" }),
+  city: z
+    .string()
+    .min(3, { message: "A cidade é obrigatória" })
+    .max(50, { message: "A cidade não pode ter mais de 50 caracteres" }),
   state: z
     .string()
     .length(2, { message: "O estado deve ter 2 letras (Ex: SP)" }),
@@ -41,14 +54,19 @@ export const schemaAddress = z.object({
   }),
 });
 export const schemaUserCadastro = z.object({
-  name: z.string().min(1, { message: "O nome é obrigatório" }),
+  name: z
+    .string()
+    .min(1, { message: "O nome é obrigatório" })
+    .max(50, { message: "O nome não pode ter mais de 50 caracteres" }),
   email: z
     .string()
     .email({ message: "E-mail inválido" })
-    .min(1, { message: "O e-mail é obrigatório" }),
+    .min(1, { message: "O e-mail é obrigatório" })
+    .max(50, { message: "O email não pode ter mais de 50 caracteres" }),
   password: z
     .string()
-    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" })
+    .max(50, { message: "A senha não pode ter mais de 50 caracteres" }),
   confirmPassword: z.string().min(8, {
     message: "A confirmação de senha deve ter pelo menos 8 caracteres",
   }),
@@ -65,7 +83,8 @@ export const schemaUserEdit = z.object({
     .min(1, { message: "O e-mail é obrigatório" }),
   password: z
     .string()
-    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" })
+    .max(50, { message: "A senha não pode ter mais de 50 caracteres" }),
   confirmPassword: z.string().min(8, {
     message: "A confirmação de senha deve ter pelo menos 8 caracteres",
   }),
@@ -74,9 +93,12 @@ export const schemaUserEdit = z.object({
   }),
 });
 export const schemaItem = z.object({
-  description: z.string().min(3, {
-    message: "A descrição do item é obrigatória (mínimo 3 caracteres).",
-  }),
+  description: z
+    .string()
+    .min(3, {
+      message: "A descrição do item é obrigatória (mínimo 3 caracteres).",
+    })
+    .max(50, { message: "A descrição não pode ter mais de 50 caracteres" }),
   unitPrice: z
     .number()
     .min(0.01, { message: "O preço unitário deve ser um valor positivo." }),
@@ -92,10 +114,21 @@ export const schemaItem = z.object({
 });
 
 export const schemaRegister = z.object({
-  name: z.string().min(2, "Nome é obrigatório"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(10, "Telefone inválido"),
-  password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
+  name: z
+    .string()
+    .min(2, "Nome é obrigatório")
+    .max(50, { message: "O nome não pode ter mais de 50 caracteres" }),
+  email: z
+    .string()
+    .email("Email inválido")
+    .max(50, { message: "O email não pode ter mais de 50 caracteres" }),
+  phone: z.string().regex(/\(\d{2}\) \d{5}-\d{4}/, {
+    message: "Celular inválido, siga o formato (XX) XXXXX-XXXX",
+  }),
+  password: z
+    .string()
+    .min(8, { message: "A senha deve ter pelo menos 8 caracteres" })
+    .max(50, { message: "A senha não pode ter mais de 50 caracteres" }),
   confirmPassword: z.string().min(8, {
     message: "A confirmação de senha deve ter pelo menos 8 caracteres",
   }),
