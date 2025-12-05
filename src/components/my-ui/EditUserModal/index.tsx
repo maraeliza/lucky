@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -22,6 +22,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
+  Select,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,6 +62,7 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
   const toast = useToast();
 
   const useMutationEdit = useEditUser();
+  const [role, setRole] = useState<string>(user?.role || "");
   console.log(user);
   const {
     handleSubmit,
@@ -140,9 +142,10 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
           zipCode: user.address.zipCode,
         },
       });
+      setRole(user.role);
     }
   }, [user, reset]);
-
+  console.log(errors)
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="3xl">
@@ -231,7 +234,7 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                   ))}
                 </SimpleGrid>
               </Box>
-              {/* <Box p={4} bg="white" shadow="md" borderRadius="md">
+              <Box p={4} bg="white" shadow="md" borderRadius="md">
                 <Heading size="md" mb={4}>
                   Tipo de Usuário
                 </Heading>
@@ -239,7 +242,11 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                   <FormControl isInvalid={!!errors.role}>
                     <Select
                       placeholder={"Selecione o tipo de usuário"}
-                      {...register("role")}
+                      value={role}
+                      onChange={(e) => {
+                        setRole(e.target.value)
+                        setValue("role", e.target.value)
+                      }}
                     >
                       <option value={"ADMIN"}>Administrador</option>
                       <option value={"CLIENT"}>Cliente</option>
@@ -247,7 +254,7 @@ export default function UserEditModal({ user, isOpen, onClose }: Props) {
                     <FormErrorMessage>{errors.role?.message}</FormErrorMessage>
                   </FormControl>
                 </SimpleGrid>
-              </Box> */}
+              </Box>
             </VStack>
           </ModalBody>
 
